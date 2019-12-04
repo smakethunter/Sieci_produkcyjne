@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/network__debug.dir/src/network.cpp.o CMakeFiles/network__debug.dir/network_exec.cpp.o  -o network__debug 

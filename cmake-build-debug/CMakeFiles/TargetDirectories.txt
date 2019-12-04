@@ -1,0 +1,4 @@
+/home/smaket/CLionProjects/network/Sieci_produkcyjne/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/smaket/CLionProjects/network/Sieci_produkcyjne/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/smaket/CLionProjects/network/Sieci_produkcyjne/cmake-build-debug/CMakeFiles/network__debug.dir
+/home/smaket/CLionProjects/network/Sieci_produkcyjne/cmake-build-debug/CMakeFiles/network__test.dir

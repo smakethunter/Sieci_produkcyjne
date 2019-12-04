@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/network.hpp
+string
+-
+map
+-
+vector
+-
+functional
+-
+
+/home/smaket/CLionProjects/network/Sieci_produkcyjne/network_exec.cpp
+cstdlib
+-
+iostream
+-
+functional
+-
+string
+-
+network.hpp
+/home/smaket/CLionProjects/network/Sieci_produkcyjne/network.hpp
+
+/home/smaket/CLionProjects/network/Sieci_produkcyjne/src/network.cpp
+network.hpp
+/home/smaket/CLionProjects/network/Sieci_produkcyjne/src/network.hpp
+sstream
+-
+iomanip
+-
+algorithm
+-
+
