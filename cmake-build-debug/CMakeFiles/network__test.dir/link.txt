@@ -1,1 +1,0 @@
-/usr/bin/c++  -g   CMakeFiles/network__test.dir/src/network.cpp.o CMakeFiles/network__test.dir/test/test_network.cpp.o CMakeFiles/network__test.dir/test/main_gtest.cpp.o  -o network__test -lgmock 
