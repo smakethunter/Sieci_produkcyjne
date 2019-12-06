@@ -9,7 +9,7 @@ include_directories(
 )
 
 set(SOURCE_FILES
-        src/network.cpp
+        src/
         )
 
 add_executable(network__debug ${SOURCE_FILES} ../network_exec.cpp)
