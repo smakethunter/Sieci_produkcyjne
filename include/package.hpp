@@ -1,10 +1,27 @@
 //
 // Created by smaket on 06.12.2019.
 //
-
+#include <set>
 #ifndef SIECI_PRODUKCYJNE_PACKAGE_HPP
 #define SIECI_PRODUKCYJNE_PACKAGE_HPP
+using ElementID =int;
 class Package {
+public:
+    Package();
 
+    Package (const Package& p);
+
+    ~Package();
+
+    ElementID get_id();
+    static std::set<ElementID> freed_ids;
+    static std::set<ElementID> assigned_ids;
+
+private:
+
+    ElementID product_id;
 };
+extern std::set<ElementID> freed_ids;
+extern  std::set<ElementID> assigned_ids;
+void print_ids();
 #endif //SIECI_PRODUKCYJNE_PACKAGE_HPP

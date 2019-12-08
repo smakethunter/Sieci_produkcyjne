@@ -9,7 +9,8 @@ include_directories(
 )
 
 set(SOURCE_FILES
-        src/
+        src/storage_types.cpp
+        src/package.cpp
         )
 
 add_executable(network__debug ${SOURCE_FILES} ../network_exec.cpp)
@@ -27,6 +28,6 @@ target_include_directories(network__test PUBLIC
         ../../googletest-master/googletest/include
         )
 
-#add_subdirectory(.../googletest-master)
+add_subdirectory(googletest-master)
 
 target_link_libraries(network__test gmock)
