@@ -11,6 +11,7 @@ include_directories(
 set(SOURCE_FILES
         src/storage_types.cpp
         src/package.cpp
+        src/network.cpp
         )
 
 add_executable(network__debug ${SOURCE_FILES} ../network_exec.cpp)
