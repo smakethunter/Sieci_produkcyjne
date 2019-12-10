@@ -4,8 +4,10 @@
 #include "package.hpp"
 #include "types.hpp"
 #include <iostream>
+
 std::set<ElementID > Package::freed_ids;
 std::set<ElementID > Package::assigned_ids;
+
 Package::Package() {
     if (std::size(freed_ids)) {
 

@@ -16,14 +16,11 @@ FIFO, LIFO
 };
 
 
-
-
 class IPackageStockpile{
 
 public:
 
     IPackageStockpile()= default;
-
 
     virtual void push(Package&);
 

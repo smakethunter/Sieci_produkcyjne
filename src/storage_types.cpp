@@ -4,7 +4,6 @@
 #include "storage_types.hpp"
 
 
-
 Package PackageQueue::pop() {
     Package ret;
 
