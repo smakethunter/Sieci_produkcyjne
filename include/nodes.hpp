@@ -84,9 +84,9 @@ class Worker: public PackageSender, public IPackageReceiver {
 
     void do_work();
 
-    TimeOffset get_processing_duration();
+    TimeOffset get_processing_duration(){ return  to;};
 
-    Time get_package_processing_start_time();
+    Time get_package_processing_start_time(){ return processing_start_time;};
 private:
     ElementID id;
     TimeOffset to;
