@@ -60,12 +60,10 @@ TEST(StorageTypesTest,testLIFO) {
 
     queue.push(r);
 
-    print_ids();
+
     EXPECT_EQ(queue.size(), 3);
     Package package = queue.pop();
     EXPECT_EQ(package.get_id(), 3);
 
     EXPECT_EQ(queue.size(),2);
 }
-
-

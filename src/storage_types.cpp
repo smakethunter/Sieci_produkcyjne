@@ -32,13 +32,11 @@ void PackageQueue::push(Package &p) {
 
 }
 
+int PackageQueue::size() const { return int(std::size(package_queue));}
 
-int IPackageStockpile::size() const {
-    return int(std::size(package_queue));
-}
 
 bool IPackageStockpile::empty() const {
-    return int(IPackageStockpile::size())!=0;
+    return int(size())!=0;
 }
 
 

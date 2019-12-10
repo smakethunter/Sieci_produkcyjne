@@ -25,14 +25,14 @@ public:
     IPackageStockpile()= default;
 
 
-    virtual void push(Package&);
+    virtual void push(Package&)=0;
 
     virtual bool empty() const;
 
-    [[nodiscard]] virtual int size() const;
+    virtual int size() const=0;
 
 protected:
-    std::deque<Package> package_queue;
+
 };
 
 class IPackageQueue : public IPackageStockpile{
@@ -40,9 +40,9 @@ public:
     IPackageQueue():IPackageStockpile(){}
 
 
-    virtual Package pop();
+    virtual Package pop()  = 0 ;
 
-    virtual PackageQueueType get_queue_type();
+    virtual PackageQueueType get_queue_type() = 0;
 
 
 
@@ -57,12 +57,13 @@ public:
     Package pop() override ;
 
     PackageQueueType get_queue_type() override ;
+    int size() const override;
 
 
 private:
 
     PackageQueueType queueType;
-
+    std::deque<Package> package_queue;
 };
 
 #endif //SIECI_PRODUKCYJNE_STORAGE_TYPES_HPP
