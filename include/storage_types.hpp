@@ -1,16 +1,17 @@
 //
 // Created by smaket on 06.12.2019.
 //
-#include "package.hpp"
-#include "types.hpp"
+
+
+
+#ifndef SIECI_PRODUKCYJNE_STORAGE_TYPES_HPP
+#define SIECI_PRODUKCYJNE_STORAGE_TYPES_HPP
 #include <set>
 #include <deque>
 #include <iostream>
 #include <memory>
-#ifndef SIECI_PRODUKCYJNE_STORAGE_TYPES_HPP
-#define SIECI_PRODUKCYJNE_STORAGE_TYPES_HPP
-
-
+#include "types.hpp"
+#include "package.hpp"
 enum class PackageQueueType{
 FIFO, LIFO
 };
