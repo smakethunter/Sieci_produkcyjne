@@ -83,3 +83,5 @@ IPackageReceiver *ReceiverPreferences::choose_receiver() {
     }
     return (preferences_map.begin())->first;
 }
+
+

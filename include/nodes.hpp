@@ -19,9 +19,9 @@ Ramp,Worker,Storehouse
 
 class IPackageReceiver{
 public:
-    virtual void receive_package(Package&& p);
-    virtual void do_work();
-    ElementID  get_id();
+    virtual void receive_package(Package&& p)=0;
+    virtual void do_work()=0;
+    virtual ElementID  get_id()=0;
 
 };
 

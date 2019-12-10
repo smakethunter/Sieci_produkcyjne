@@ -1,10 +1,12 @@
 //
 // Created by smaket on 06.12.2019.
 //
-#include <set>
 #ifndef SIECI_PRODUKCYJNE_PACKAGE_HPP
 #define SIECI_PRODUKCYJNE_PACKAGE_HPP
-using ElementID =int;
+
+#include "types.hpp"
+#include <set>
+
 class Package {
 public:
     Package();
