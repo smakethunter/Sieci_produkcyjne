@@ -27,3 +27,4 @@ extern std::set<ElementID> freed_ids;
 extern  std::set<ElementID> assigned_ids;
 void print_ids();
 #endif //SIECI_PRODUKCYJNE_PACKAGE_HPP
+//&&
