@@ -7,31 +7,22 @@
 Worker::Worker(ElementID id_, TimeOffset to_, std::unique_ptr<IPackageQueue> q) :
        PackageSender(), IPackageReceiver(ReceiverType::Worker),id(id_),to(to_),queue_pointer(std::move(q)){}
 
-void Worker::receive_package(Package &p) {
-    queue_pointer->push(p);
+void Worker::receive_package(Package &&p) {
+    queue_pointer->push(std::move(p));
+    push_package(queue_pointer->pop());
+
 
 
 }
 
 void Worker::do_work() {
-    if(!get_sending_buffer()){
 
-        push_package(queue_pointer->pop());
-        processing_start_time=0;
-
-    }
-    else {
-        processing_start_time++;
-    }
-    if (processing_start_time==get_processing_duration()){
-        send_package();
-    }
 
 
 }
 
-void Storehouse::receive_package(Package &p) {
-    queue_pointer->push(p);
+void Storehouse::receive_package(Package &&p) {
+    queue_pointer->push(std::move(p));
 
 }
 
@@ -116,13 +107,13 @@ IPackageReceiver *ReceiverPreferences::choose_receiver() {
 
 void PackageSender::push_package(Package p) {
     if (!get_sending_buffer()){
-        sending_buffer.emplace(p);
+        sending_buffer.emplace(std::move(p));
     }
 
 }
 
 std::optional<Package> PackageSender::get_sending_buffer() {
-    return sending_buffer;
+    return std::move(sending_buffer);
 }
 
 void PackageSender::send_package() {
@@ -130,18 +121,16 @@ void PackageSender::send_package() {
     Package p_to_deliver=*get_sending_buffer();
     sending_buffer.reset();
     IPackageReceiver* reciever=receiver_preferences.choose_receiver();
-    reciever->receive_package(p_to_deliver);
-
+    reciever->receive_package(std::move(p_to_deliver));
 
 }
-
-
 
 void Ramp::deliver_goods(Time t) {
     TimeOffset interval=get_delivery_interval();
     if(get_sending_buffer()){
         if(t%interval==0){
             send_package();
+
         }
     }
 

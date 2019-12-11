@@ -31,11 +31,11 @@ TEST(StorageTypesTest,testFIFO) {
 
     Package r;
 
-    queue.push(p);
+    queue.push(std::move(p));
 
-    queue.push(q);
+    queue.push(std::move(q));
 
-    queue.push(r);
+    queue.push(std::move(r));
 
 
     EXPECT_EQ(queue.size(), 3);
@@ -54,11 +54,11 @@ TEST(StorageTypesTest,testLIFO) {
 
     Package r;
 
-    queue.push(p);
+    queue.push(std::move(p));
 
-    queue.push(q);
+    queue.push(std::move(q));
 
-    queue.push(r);
+    queue.push(std::move(r));
 
 
     EXPECT_EQ(queue.size(), 3);
