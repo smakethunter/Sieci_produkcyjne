@@ -1,16 +1,19 @@
 //
 // Created by smaket on 06.12.2019.
 //
-#include "package.hpp"
-#include "types.hpp"
+
+
+
+#ifndef SIECI_PRODUKCYJNE_STORAGE_TYPES_HPP
+#define SIECI_PRODUKCYJNE_STORAGE_TYPES_HPP
+
+#include <optional>
 #include <set>
 #include <deque>
 #include <iostream>
 #include <memory>
-#ifndef SIECI_PRODUKCYJNE_STORAGE_TYPES_HPP
-#define SIECI_PRODUKCYJNE_STORAGE_TYPES_HPP
-
-
+#include "types.hpp"
+#include "package.hpp"
 enum class PackageQueueType{
 FIFO, LIFO
 };
@@ -24,7 +27,7 @@ public:
 
 
 
-    virtual void push(Package&)=0;
+    virtual void push(Package&&)=0;
 
     virtual bool empty() const;
 
@@ -51,7 +54,7 @@ class PackageQueue :public IPackageQueue{
 public:
     PackageQueue(PackageQueueType qt):IPackageQueue(),queueType(qt){}
 
-    void push(Package&) override ;
+    void push(Package&&) override ;
 
     Package pop() override ;
 
@@ -66,3 +69,4 @@ private:
 };
 
 #endif //SIECI_PRODUKCYJNE_STORAGE_TYPES_HPP
+
