@@ -26,8 +26,6 @@ void Worker::do_work() {
     if (processing_start_time==get_processing_duration()){
         send_package();
     }
-
-
 }
 
 void Storehouse::receive_package(Package &p) {
