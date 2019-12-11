@@ -24,7 +24,7 @@ add_executable(network__debug ${SOURCE_FILES} ../network_exec.cpp)
 
 set(SOURCES_FILES_TESTS
         test/test_network.cpp
-        )
+        src/reports.cpp)
 
 add_executable(network__test ${SOURCE_FILES} ${SOURCES_FILES_TESTS} test/main_gtest.cpp)
 
