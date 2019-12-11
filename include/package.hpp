@@ -11,10 +11,10 @@ class Package {
 public:
     Package();
 
-    Package (const Package& p);
+    Package (Package&& p);
 
     ~Package();
-
+    Package& operator=(Package&&)= default;
     ElementID get_id();
     static std::set<ElementID> freed_ids;
     static std::set<ElementID> assigned_ids;

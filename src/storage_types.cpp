@@ -10,11 +10,11 @@ Package PackageQueue::pop() {
     PackageQueueType p = get_queue_type();
     switch(p){
         case PackageQueueType::FIFO:
-            ret = *package_queue.begin();
+            ret = std::move(*package_queue.begin());
             package_queue.erase(package_queue.cbegin());
             break;
         case PackageQueueType::LIFO:
-            ret = *package_queue.rbegin();
+            ret = std::move(*package_queue.rbegin());
             package_queue.erase(package_queue.end());
             break;
     }
@@ -25,9 +25,9 @@ PackageQueueType PackageQueue::get_queue_type() {
     return queueType;
 }
 
-void PackageQueue::push(Package &p) {
+void PackageQueue::push(Package &&p) {
 
-    package_queue.push_back(p);
+    package_queue.push_back(std::move(p));
 
 }
 

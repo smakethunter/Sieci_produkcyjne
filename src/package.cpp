@@ -41,11 +41,13 @@ ElementID Package::get_id() {
 
 
 
-Package::Package(const Package &p) {
-    product_id=p.product_id;
+Package::Package( Package &&p) {
+    product_id=std::move(p.product_id);
     Package::assigned_ids.erase(*assigned_ids.rbegin());
 
 }
+
+
 
 void print_ids(){
     for (const auto i: Package::freed_ids){
