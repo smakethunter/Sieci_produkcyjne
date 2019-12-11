@@ -11,3 +11,4 @@ class Factory{
 
 };
 #endif //SIECI_PRODUKCYJNE_FACTORY_HPP
+// comment
