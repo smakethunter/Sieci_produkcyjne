@@ -33,14 +33,15 @@ public:
 
     virtual int size() const=0;
 
-protected:
-
+    virtual std::deque<Package>::iterator begin()=0;
+    virtual std::deque<Package>::iterator end()=0;
+    virtual std::deque<Package>::reverse_iterator rbegin()=0;
 };
 
 class IPackageQueue : public IPackageStockpile{
 public:
     IPackageQueue():IPackageStockpile(){}
-
+    void push(Package&&) override=0;
 
     virtual Package pop()  = 0 ;
 
@@ -60,7 +61,9 @@ public:
 
     PackageQueueType get_queue_type() override ;
     int size() const override;
-
+    std::deque<Package>::iterator begin() override {return package_queue.begin();}
+    std::deque<Package>::iterator end() override {return package_queue.end();}
+    std::deque<Package>::reverse_iterator rbegin() override {return package_queue.rbegin();}
 
 private:
 

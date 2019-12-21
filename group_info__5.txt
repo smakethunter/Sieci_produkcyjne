@@ -1,0 +1,8 @@
+Członkowie grupy 5:
+(1) Wojciech Pełka, 302895
+(2) Piotr Pawełczak, 302894
+(3) Norbert Sak, 302910
+
+Kierownik grupy: Wojciech Pełka
+
+URL repozytorium: https://github.com/smakethunter/Sieci_produkcyjne.git

@@ -12,6 +12,7 @@
 #include <random>
 #include <cstdlib>
 #include <vector>
+#include <functional>
 
 enum class ReceiverType{
 Ramp,Worker,Storehouse
@@ -28,11 +29,18 @@ private:
 
 };
 
-class Storehouse : IPackageReceiver{
+class Storehouse : public IPackageReceiver{
+public:
     Storehouse(ElementID id_, std::unique_ptr<IPackageStockpile> d):
     IPackageReceiver(ReceiverType::Storehouse), id(id_),queue_pointer(std::move(d)){}
+public:
     ElementID  get_id() const override { return id;};
+public:
     void receive_package(Package&& p) override;
+    std::deque<Package>::iterator begin(){ return queue_pointer->begin();}
+    std::deque<Package>::iterator end(){ return queue_pointer->end();}
+    std::deque<Package>::reverse_iterator rbegin(){ return queue_pointer->rbegin();}
+    int size(){return queue_pointer->size();}
 private:
     ElementID id;
     std::unique_ptr<IPackageStockpile> queue_pointer;
@@ -44,9 +52,12 @@ public:
     using preferences_t = std::map<IPackageReceiver*, double>;
     using const_iterator = preferences_t::const_iterator;
     using iterator = preferences_t::iterator;
+    iterator begin(){ return preferences_map.begin();}
+    iterator end(){return preferences_map.end();}
     void add_receiver(IPackageReceiver*);
     void remove_receiver(IPackageReceiver*);
     IPackageReceiver* choose_receiver();
+    std::function<double()> prob_rand = [](){ return (double)rand() / RAND_MAX; };
 
 private:
     preferences_t preferences_map;
@@ -54,17 +65,18 @@ private:
 
 class PackageSender {
 public:
+    //#TODO: send package nie dziala problem na linii przekazywania paczki.
     void send_package();
     std::optional<Package> get_sending_buffer();
-    void push_package(Package);
-
-private:
+    void push_package(Package&&);
     std::optional<Package> sending_buffer;
+public:
     ReceiverPreferences receiver_preferences;
 };
 
-class Ramp :PackageSender{
-    Ramp (ElementID id_, TimeOffset to_):PackageSender(),id(id_),to(to_){}
+class Ramp : public PackageSender{
+public:
+    Ramp (ElementID id_, TimeOffset to_):  id(id_),to(to_){}
     void deliver_goods(Time t);
     TimeOffset get_delivery_interval()const{ return to;};
     ElementID get_id()const  {return id;};
@@ -76,23 +88,33 @@ private:
 };
 
 class Worker: public PackageSender, public IPackageReceiver {
+public:
     Worker(ElementID id_, TimeOffset to_,std::unique_ptr<IPackageQueue> q);
 
     ElementID  get_id() const override { return id;};
 
     void receive_package(Package&& p) override;
 
-    void do_work();
+    void do_work(Time);
 
     TimeOffset get_processing_duration(){ return  to;};
 
     Time get_package_processing_start_time(){ return processing_start_time;};
+    std::deque<Package>::iterator begin(){ return queue_pointer->begin();}
+    std::deque<Package>::iterator end(){ return queue_pointer->end();}
+    std::deque<Package>::reverse_iterator rbegin(){ return queue_pointer->rbegin();}
+    int size(){return queue_pointer->size();}
+
+
 private:
     ElementID id;
     TimeOffset to;
-    std::unique_ptr<IPackageQueue> queue_pointer;
     Time processing_start_time;
+public:
+    std::unique_ptr<IPackageQueue> queue_pointer;
 
 };
-double generate_random();
+void add_nr(int nr, std::map<int,double>& map);
+int remove_nr(int nr, std::map<int,double> &preferences_map);
+int choose_nr(double mocked_prob,std::map<int,double> &preferences_map);
 #endif //SIECI_PRODUKCYJNE_NODES_HPP
