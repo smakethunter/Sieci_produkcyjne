@@ -42,8 +42,9 @@ ElementID Package::get_id() {
 
 
 Package::Package( Package &&p) {
-    product_id=p.product_id;
-    Package::assigned_ids.erase(*assigned_ids.rbegin());
+    //product_id=p.product_id;
+    *this=std::move(p);
+   // Package::assigned_ids.erase(*assigned_ids.rbegin());
 
 }
 

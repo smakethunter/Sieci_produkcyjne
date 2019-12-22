@@ -29,7 +29,7 @@ if (to==t-processing_start_time){
 else{
     std::string info="processing";
 
-    std::cout<<info<< ' '<<sending_buffer.value().get_id();
+    std::cout<<std::endl<<info<< ' '<<sending_buffer.value().get_id()<<std::endl;
 }
 
 }
@@ -127,16 +127,17 @@ std::optional<Package> PackageSender::get_sending_buffer() {
 
     return std::move(sending_buffer);
 }
-// TODO : send package() problem w miejscu przekaznia do odbiorcy
+
 void PackageSender::send_package() {
+    Package p(std::move(sending_buffer.value()));
 
-
-    std::cout<<sending_buffer.value().get_id();
+    std::cout<<std::endl<<sending_buffer.value().get_id();
     IPackageReceiver* reciever=receiver_preferences.choose_receiver();
     std::cout<<reciever->get_id();
-// TODO: do poprawy
-    reciever->receive_package(std::move(*get_sending_buffer()));
-    //sending_buffer.reset();
+
+
+    reciever->receive_package(std::move(p));
+    sending_buffer.reset();
 }
 // TODO: send_package() do naprwy dlatego nie przechodzi testow.
 void Ramp::deliver_goods(Time t) {

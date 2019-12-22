@@ -36,16 +36,17 @@ TEST(PackageSenderTest, TestBuffer){
     ASSERT_EQ(r.get_id(),3);
     Package test;
     Package wtest;
+
+
     Package stest;
     queue.push(std::move(p));
-
     queue.push(std::move(q));
-
     queue.push(std::move(r));
 
-    Storehouse s1(1,std::make_unique<PackageQueue>(std::move(queue2)));
+
     Worker w1(1, 2, std::make_unique<PackageQueue>(std::move(queue)));
     Ramp r1(1,1);
+    Storehouse s1(1,std::make_unique<PackageQueue>(std::move(queue2)));
     ASSERT_EQ(r1.get_sending_buffer(),std::nullopt);
     r1.push_package(std::move(test));
     ASSERT_EQ(r1.sending_buffer->get_id(),4);
@@ -55,7 +56,7 @@ TEST(PackageSenderTest, TestBuffer){
     ASSERT_EQ(r1.receiver_preferences.begin()->first->get_id(),1);
     ASSERT_EQ(r1.receiver_preferences.choose_receiver()->get_id(),1);
     ASSERT_EQ(r1.receiver_preferences.choose_receiver()->get_receiver_type(),ReceiverType::Worker);
-    //r1.deliver_goods(1);
+    r1.deliver_goods(1);
     w1.receive_package(std::move(wtest));
     for (auto& i: *(w1.queue_pointer)){
         std::cout << i.get_id() <<',';
@@ -64,9 +65,15 @@ TEST(PackageSenderTest, TestBuffer){
     ASSERT_EQ(w1.sending_buffer.value().get_id(),1);
     w1.do_work(1);
     w1.do_work(2);
-    //w1.do_work(3);
-    //s1.receive_package(std::move(stest));
-    ASSERT_EQ(s1.begin()->get_id(),0);
+    w1.do_work(3);
+
+    std::optional<Package> opt{std::move(stest)};
+
+    ASSERT_EQ(opt.value().get_id(), 6);
+    Package x(std::move(opt.value()));
+    s1.receive_package(std::move(x));
+    ASSERT_EQ(s1.begin()->get_id(),1);
+    ASSERT_EQ(s1.rbegin()->get_id(),6);
 
 
 
