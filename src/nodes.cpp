@@ -154,7 +154,7 @@ void Ramp::deliver_goods(Time t) {
 }
 // funkcje testyjace na szybkosci dystrybuante
 
-double prob_rand(){return (double)rand()/RAND_MAX;}
+double prob_rand() {return (double)rand()/RAND_MAX;}
 void add_nr(int nr, std::map<int,double>& map) {
 
     map.insert(std::make_pair(nr, 0));

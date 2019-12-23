@@ -54,10 +54,11 @@ public:
     using iterator = preferences_t::iterator;
     iterator begin(){ return preferences_map.begin();}
     iterator end(){return preferences_map.end();}
+    std::map<IPackageReceiver*, double >::reverse_iterator rbegin(){ return preferences_map.rbegin();}
     void add_receiver(IPackageReceiver*);
     void remove_receiver(IPackageReceiver*);
     IPackageReceiver* choose_receiver();
-    std::function<double()> prob_rand = [](){ return (double)rand() / RAND_MAX; };
+    ProbabilityGenerator prob_rand = [](){ return (double)rand() / RAND_MAX; };
 
 private:
     preferences_t preferences_map;
