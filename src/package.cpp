@@ -44,8 +44,6 @@ ElementID Package::get_id() {
 Package::Package( Package &&p) {
 
     *this=std::move(p);
-
-
 }
 
 
@@ -53,4 +51,9 @@ Package::Package( Package &&p) {
 
 
 
-//&&
+
+
+
+
+
+

@@ -72,3 +72,4 @@ private:
 };
 
 #endif //SIECI_PRODUKCYJNE_STORAGE_TYPES_HPP
+

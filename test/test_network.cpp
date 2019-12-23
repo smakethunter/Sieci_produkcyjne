@@ -67,3 +67,4 @@ TEST(StorageTypesTest,testLIFO) {
 
     EXPECT_EQ(queue.size(),2);
 }
+

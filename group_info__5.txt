@@ -6,3 +6,4 @@ Członkowie grupy 5:
 Kierownik grupy: Wojciech Pełka
 
 URL repozytorium: https://github.com/smakethunter/Sieci_produkcyjne.git
+
