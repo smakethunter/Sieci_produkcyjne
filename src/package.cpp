@@ -42,24 +42,15 @@ ElementID Package::get_id() {
 
 
 Package::Package( Package &&p) {
-    //product_id=p.product_id;
+
     *this=std::move(p);
-   // Package::assigned_ids.erase(*assigned_ids.rbegin());
+
 
 }
 
 
 
 
-void print_ids(){
-    for (const auto i: Package::freed_ids){
-        std::cout<<i<<',';
-    }
-    std::cout<<std::endl;
-    for (const auto i: Package::assigned_ids){
-        std::cout<<i<<',';
-    }
-    std::cout<<std::endl;
-}
+
 
 //&&

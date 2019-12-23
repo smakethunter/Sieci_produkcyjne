@@ -65,7 +65,7 @@ private:
 
 class PackageSender {
 public:
-    //#TODO: send package nie dziala problem na linii przekazywania paczki.
+
     void send_package();
     std::optional<Package> get_sending_buffer();
     void push_package(Package&&);

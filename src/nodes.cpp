@@ -10,7 +10,7 @@ Worker::Worker(ElementID id_, TimeOffset to_, std::unique_ptr<IPackageQueue> q) 
 
 void Worker::receive_package(Package &&p) {
 
-    std::cout<<p.get_id();
+
     queue_pointer->push(std::move(p));
 
     push_package(queue_pointer->pop());
@@ -131,20 +131,20 @@ std::optional<Package> PackageSender::get_sending_buffer() {
 void PackageSender::send_package() {
     Package p(std::move(sending_buffer.value()));
 
-    std::cout<<std::endl<<sending_buffer.value().get_id();
+
     IPackageReceiver* reciever=receiver_preferences.choose_receiver();
-    std::cout<<reciever->get_id();
+
 
 
     reciever->receive_package(std::move(p));
     sending_buffer.reset();
 }
-// TODO: send_package() do naprwy dlatego nie przechodzi testow.
+
 void Ramp::deliver_goods(Time t) {
     TimeOffset interval=get_delivery_interval();
    if(sending_buffer.has_value()){
         if(t%interval==0){
-        std::cout<<std::endl<<t;
+
             send_package();
 
         }
@@ -211,9 +211,7 @@ int choose_nr(double mocked_prob,std::map<int,double> &preferences_map) {
         benchmarks.push_back(c);
 
     }
-    for (const auto &i: benchmarks) {
-        std::cout << i << ',';
-    }
+
     double receiverRandom=mocked_prob;
     for (int i=0;i<int(std::size(benchmarks));i++){
         if (benchmarks[i] < receiverRandom && receiverRandom <= benchmarks[i + 1]){
