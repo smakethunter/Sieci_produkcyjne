@@ -24,8 +24,10 @@ add_executable(network__debug ${SOURCE_FILES} ../network_exec.cpp)
 
 set(SOURCES_FILES_TESTS
 
-        #test/test_network.cpp
+
         test/test_random.cpp
+        test/test_network.cpp
+
         )
 
 

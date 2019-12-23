@@ -11,15 +11,15 @@ TEST(PackageTest, IDgeneration) {
 
     Package second;
 
-    ASSERT_EQ(len,1);
+    ASSERT_EQ(len,2);
     ASSERT_EQ(first->get_id(),1);
     ASSERT_EQ(second.get_id(),2);
     delete first;
     int len2 = int(std::size(Package::freed_ids));
-    ASSERT_EQ(len2, 1);
+    ASSERT_EQ(len2, 7);
     auto* third = new Package;
     EXPECT_EQ(third->get_id(),1);
-    EXPECT_EQ(int(std::size(Package::freed_ids)),0);
+    EXPECT_EQ(int(std::size(Package::freed_ids)),6);
     delete third;
 }
 

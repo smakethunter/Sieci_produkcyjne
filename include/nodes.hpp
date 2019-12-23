@@ -33,6 +33,7 @@ class Storehouse : public IPackageReceiver{
 public:
     Storehouse(ElementID id_, std::unique_ptr<IPackageStockpile> d):
     IPackageReceiver(ReceiverType::Storehouse), id(id_),queue_pointer(std::move(d)){}
+    ~Storehouse()= default;
 public:
     ElementID  get_id() const override { return id;};
 public:
@@ -41,6 +42,7 @@ public:
     std::deque<Package>::iterator end(){ return queue_pointer->end();}
     std::deque<Package>::reverse_iterator rbegin(){ return queue_pointer->rbegin();}
     int size(){return queue_pointer->size();}
+
 private:
     ElementID id;
     std::unique_ptr<IPackageStockpile> queue_pointer;
@@ -91,7 +93,7 @@ private:
 class Worker: public PackageSender, public IPackageReceiver {
 public:
     Worker(ElementID id_, TimeOffset to_,std::unique_ptr<IPackageQueue> q);
-
+    ~Worker()= default;
     ElementID  get_id() const override { return id;};
 
     void receive_package(Package&& p) override;
