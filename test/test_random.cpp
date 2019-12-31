@@ -56,8 +56,7 @@ TEST(PackageSenderTest, TestBuffer){
     //r1.receiver_preferences.add_receiver(&w2);
     r1.receiver_preferences.add_receiver(&w1);
 
-    std::cout<<r1.receiver_preferences.rbegin()->second<<","<<r1.receiver_preferences.begin()->first<<std::endl;
-    std::cout<<r1.receiver_preferences.begin()->second<<","<<r1.receiver_preferences.begin()->first<<std::endl;
+
     ASSERT_EQ(r1.receiver_preferences.begin()->first->get_id(),1);
     ASSERT_EQ(r1.receiver_preferences.choose_receiver()->get_id(),1);
     ASSERT_EQ(r1.receiver_preferences.choose_receiver()->get_receiver_type(),ReceiverType::Worker);

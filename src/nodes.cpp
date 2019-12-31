@@ -26,11 +26,7 @@ if (to==t-processing_start_time){
     send_package();
     processing_start_time=0;
 }
-else{
-    std::string info="processing";
 
-    std::cout<<std::endl<<info<< ' '<<sending_buffer.value().get_id()<<std::endl;
-}
 
 }
 
