@@ -21,6 +21,7 @@ Ramp,Worker,Storehouse
 class IPackageReceiver{
 public:
     IPackageReceiver(){};
+    IPackageReceiver(ReceiverType r): receiverType(r){};
     virtual void receive_package(Package&& p)=0;
     virtual ElementID get_id() const =0;
     ReceiverType get_receiver_type()const {return receiverType;}
@@ -37,7 +38,7 @@ private:
 class Storehouse : public IPackageReceiver{
 public:
     Storehouse(ElementID id_, std::unique_ptr<IPackageStockpile> d):
-    IPackageReceiver(), id(id_),queue_pointer(std::move(d)){}
+    IPackageReceiver(ReceiverType::Storehouse), id(id_),queue_pointer(std::move(d)){}
     ~Storehouse()= default;
 public:
     ElementID  get_id() const override { return id;};
