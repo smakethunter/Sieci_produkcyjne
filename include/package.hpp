@@ -15,7 +15,7 @@ public:
 
     ~Package();
     Package& operator=(Package&&)= default;
-    ElementID get_id();
+    ElementID get_id() const;
     static std::set<ElementID> freed_ids;
     static std::set<ElementID> assigned_ids;
 

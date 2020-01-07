@@ -13,7 +13,7 @@
 #include <cstdlib>
 #include <vector>
 #include <functional>
-
+#include "helpers.hpp"
 enum class ReceiverType{
 Ramp,Worker,Storehouse
 };
@@ -41,6 +41,8 @@ public:
     std::deque<Package>::iterator begin(){ return queue_pointer->begin();}
     std::deque<Package>::iterator end(){ return queue_pointer->end();}
     std::deque<Package>::reverse_iterator rbegin(){ return queue_pointer->rbegin();}
+    std::deque<Package>::const_iterator cbegin(){ return queue_pointer->cbegin();}
+    std::deque<Package>::const_iterator cend(){ return queue_pointer->cend();}
     int size(){return queue_pointer->size();}
 
 private:
@@ -61,7 +63,7 @@ public:
     void remove_receiver(IPackageReceiver*);
     IPackageReceiver* choose_receiver();
     ProbabilityGenerator prob_rand = [](){ return (double)rand() / RAND_MAX; };
-
+    preferences_t& get_preferences() { return preferences_map;};
 private:
     preferences_t preferences_map;
 };
@@ -70,7 +72,7 @@ class PackageSender {
 public:
 
     void send_package();
-    std::optional<Package> get_sending_buffer();
+    std::optional<Package>& get_sending_buffer();
     void push_package(Package&&);
     std::optional<Package> sending_buffer;
 public:
@@ -106,6 +108,8 @@ public:
     std::deque<Package>::iterator begin(){ return queue_pointer->begin();}
     std::deque<Package>::iterator end(){ return queue_pointer->end();}
     std::deque<Package>::reverse_iterator rbegin(){ return queue_pointer->rbegin();}
+    std::deque<Package>::const_iterator cbegin(){ return queue_pointer->cbegin();}
+    std::deque<Package>::const_iterator cend(){ return queue_pointer->cend();}
     int size(){return queue_pointer->size();}
 
 

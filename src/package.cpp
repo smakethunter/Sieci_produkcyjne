@@ -35,7 +35,7 @@ Package::~Package() {
 
 
 
-ElementID Package::get_id() {
+ElementID Package::get_id() const{
     return product_id;
 }
 

@@ -22,10 +22,9 @@ FIFO, LIFO
 class IPackageStockpile{
 
 public:
+    using const_iterator = std::deque<Package>::const_iterator ;
 
     IPackageStockpile()= default;
-
-
 
     virtual void push(Package&&)=0;
 
@@ -36,6 +35,8 @@ public:
     virtual std::deque<Package>::iterator begin()=0;
     virtual std::deque<Package>::iterator end()=0;
     virtual std::deque<Package>::reverse_iterator rbegin()=0;
+    virtual const_iterator cbegin() const =0;
+    virtual const_iterator cend() const =0;
 };
 
 class IPackageQueue : public IPackageStockpile{
@@ -64,7 +65,8 @@ public:
     std::deque<Package>::iterator begin() override {return package_queue.begin();}
     std::deque<Package>::iterator end() override {return package_queue.end();}
     std::deque<Package>::reverse_iterator rbegin() override {return package_queue.rbegin();}
-
+    [[nodiscard]] const_iterator cbegin() const override { return package_queue.cbegin(); }
+    [[nodiscard]] const_iterator cend() const override { return package_queue.cend();}
 private:
 
     PackageQueueType queueType;

@@ -4,5 +4,5 @@
 // Pomocnicze obiekty na funkcje globalne
 #ifndef SIECI_PRODUKCYJNE_HELPERS_HPP
 #define SIECI_PRODUKCYJNE_HELPERS_HPP
-
+#include "nodes.hpp"
 #endif //SIECI_PRODUKCYJNE_HELPERS_HPP

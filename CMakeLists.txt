@@ -16,7 +16,7 @@ set(SOURCE_FILES
 
         src/network.cpp
 
-        )
+        src/helpers.cpp)
 
 add_executable(network__debug ${SOURCE_FILES} ../network_exec.cpp)
 

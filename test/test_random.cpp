@@ -75,7 +75,7 @@ TEST(PackageSenderTest, TestBuffer){
     ASSERT_EQ(opt.value().get_id(), 6);
     Package x(std::move(opt.value()));
     s1.receive_package(std::move(x));
-    ASSERT_EQ(s1.begin()->get_id(),1);
+    ASSERT_EQ(s1.cbegin()->get_id(),1);
     ASSERT_EQ(s1.rbegin()->get_id(),6);
 
     w2.receive_package(std::move(wtest2));
