@@ -20,7 +20,7 @@ Ramp,Worker,Storehouse
 
 class IPackageReceiver{
 public:
-    explicit IPackageReceiver(ReceiverType r):receiverType(r){};
+    IPackageReceiver(){};
     virtual void receive_package(Package&& p)=0;
     virtual ElementID get_id() const =0;
     ReceiverType get_receiver_type()const {return receiverType;}
@@ -32,7 +32,7 @@ private:
 class Storehouse : public IPackageReceiver{
 public:
     Storehouse(ElementID id_, std::unique_ptr<IPackageStockpile> d):
-    IPackageReceiver(ReceiverType::Storehouse), id(id_),queue_pointer(std::move(d)){}
+    IPackageReceiver(), id(id_),queue_pointer(std::move(d)){}
     ~Storehouse()= default;
 public:
     ElementID  get_id() const override { return id;};
@@ -76,7 +76,7 @@ public:
     void push_package(Package&&);
     std::optional<Package> sending_buffer;
 public:
-    ReceiverPreferences receiver_preferences;
+    ReceiverPreferences receiver_preferences_;
 };
 
 class Ramp : public PackageSender{
@@ -121,7 +121,5 @@ public:
     std::unique_ptr<IPackageQueue> queue_pointer;
 
 };
-void add_nr(int nr, std::map<int,double>& map);
-int remove_nr(int nr, std::map<int,double> &preferences_map);
-int choose_nr(double mocked_prob,std::map<int,double> &preferences_map);
+
 #endif //SIECI_PRODUKCYJNE_NODES_HPP

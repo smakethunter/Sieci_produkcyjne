@@ -53,18 +53,18 @@ TEST(PackageSenderTest, TestBuffer){
     r1.push_package(std::move(test));
     ASSERT_EQ(r1.sending_buffer->get_id(),4);
     ASSERT_EQ(r1.sending_buffer.has_value(),true);
-    //r1.receiver_preferences.add_receiver(&w2);
-    r1.receiver_preferences.add_receiver(&w1);
+    //r1.receiver_preferences_.add_receiver(&w2);
+    r1.receiver_preferences_.add_receiver(&w1);
 
 
-    ASSERT_EQ(r1.receiver_preferences.begin()->first->get_id(),1);
-    ASSERT_EQ(r1.receiver_preferences.choose_receiver()->get_id(),1);
-    ASSERT_EQ(r1.receiver_preferences.choose_receiver()->get_receiver_type(),ReceiverType::Worker);
+    ASSERT_EQ(r1.receiver_preferences_.begin()->first->get_id(),1);
+    ASSERT_EQ(r1.receiver_preferences_.choose_receiver()->get_id(),1);
+
     r1.deliver_goods(1);
     w1.receive_package(std::move(wtest));
 
-    w1.receiver_preferences.add_receiver(&s1);
-    w2.receiver_preferences.add_receiver(&s1);
+    w1.receiver_preferences_.add_receiver(&s1);
+    w2.receiver_preferences_.add_receiver(&s1);
     ASSERT_EQ(w1.sending_buffer.value().get_id(),1);
     w1.do_work(1);
     w1.do_work(2);

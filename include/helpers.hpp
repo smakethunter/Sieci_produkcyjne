@@ -5,4 +5,7 @@
 #ifndef SIECI_PRODUKCYJNE_HELPERS_HPP
 #define SIECI_PRODUKCYJNE_HELPERS_HPP
 #include "nodes.hpp"
+void add_nr(int nr, std::map<int,double>& map);
+int remove_nr(int nr, std::map<int,double> &preferences_map);
+int choose_nr(double mocked_prob,std::map<int,double> &preferences_map);
 #endif //SIECI_PRODUKCYJNE_HELPERS_HPP

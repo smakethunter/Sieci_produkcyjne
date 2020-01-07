@@ -5,7 +5,7 @@
 #include "nodes.hpp"
 
 Worker::Worker(ElementID id_, TimeOffset to_, std::unique_ptr<IPackageQueue> q) :
-       PackageSender(), IPackageReceiver(ReceiverType::Worker),id(id_),to(to_),processing_start_time(0), queue_pointer(std::move(q)){}
+       PackageSender(), IPackageReceiver(),id(id_),to(to_),processing_start_time(0), queue_pointer(std::move(q)){}
 
 
 void Worker::receive_package(Package &&p) {
@@ -130,7 +130,7 @@ void PackageSender::send_package() {
     Package p(std::move(sending_buffer.value()));
 
 
-    IPackageReceiver* reciever=receiver_preferences.choose_receiver();
+    IPackageReceiver* reciever=receiver_preferences_.choose_receiver();
 
 
 
