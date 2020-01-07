@@ -24,6 +24,11 @@ public:
     virtual void receive_package(Package&& p)=0;
     virtual ElementID get_id() const =0;
     ReceiverType get_receiver_type()const {return receiverType;}
+    virtual std::deque<Package>::iterator begin()=0;
+    virtual std::deque<Package>::iterator end()=0;
+    virtual std::deque<Package>::reverse_iterator rbegin()=0;
+    virtual std::deque<Package>::const_iterator cbegin() const=0;
+    virtual std::deque<Package>::const_iterator cend() const =0;
 private:
     ReceiverType receiverType;
 
@@ -38,11 +43,11 @@ public:
     ElementID  get_id() const override { return id;};
 public:
     void receive_package(Package&& p) override;
-    std::deque<Package>::iterator begin(){ return queue_pointer->begin();}
-    std::deque<Package>::iterator end(){ return queue_pointer->end();}
-    std::deque<Package>::reverse_iterator rbegin(){ return queue_pointer->rbegin();}
-    std::deque<Package>::const_iterator cbegin(){ return queue_pointer->cbegin();}
-    std::deque<Package>::const_iterator cend(){ return queue_pointer->cend();}
+    std::deque<Package>::iterator begin() override { return queue_pointer->begin();}
+    std::deque<Package>::iterator end() override { return queue_pointer->end();}
+    std::deque<Package>::reverse_iterator rbegin() override { return queue_pointer->rbegin();}
+    std::deque<Package>::const_iterator cbegin() const override { return queue_pointer->cbegin();}
+    std::deque<Package>::const_iterator cend() const override { return queue_pointer->cend();}
     int size(){return queue_pointer->size();}
 
 private:
@@ -59,6 +64,9 @@ public:
     iterator begin(){ return preferences_map.begin();}
     iterator end(){return preferences_map.end();}
     std::map<IPackageReceiver*, double >::reverse_iterator rbegin(){ return preferences_map.rbegin();}
+
+    const_iterator cbegin() const { return  preferences_map.cbegin();}
+    const_iterator cend() const {return preferences_map.cend();}
     void add_receiver(IPackageReceiver*);
     void remove_receiver(IPackageReceiver*);
     IPackageReceiver* choose_receiver();
@@ -105,11 +113,11 @@ public:
     TimeOffset get_processing_duration(){ return  to;};
 
     Time get_package_processing_start_time(){ return processing_start_time;};
-    std::deque<Package>::iterator begin(){ return queue_pointer->begin();}
-    std::deque<Package>::iterator end(){ return queue_pointer->end();}
-    std::deque<Package>::reverse_iterator rbegin(){ return queue_pointer->rbegin();}
-    std::deque<Package>::const_iterator cbegin(){ return queue_pointer->cbegin();}
-    std::deque<Package>::const_iterator cend(){ return queue_pointer->cend();}
+    std::deque<Package>::iterator begin() override { return queue_pointer->begin();}
+    std::deque<Package>::iterator end() override { return queue_pointer->end();}
+    std::deque<Package>::reverse_iterator rbegin() override { return queue_pointer->rbegin();}
+    std::deque<Package>::const_iterator cbegin() const override { return queue_pointer->cbegin();}
+    std::deque<Package>::const_iterator cend() const override { return queue_pointer->cend();}
     int size(){return queue_pointer->size();}
 
 
