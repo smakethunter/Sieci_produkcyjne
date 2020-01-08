@@ -14,6 +14,7 @@
 #include <vector>
 #include <functional>
 #include "helpers.hpp"
+
 enum class ReceiverType{
 Ramp,Worker,Storehouse
 };
@@ -59,6 +60,7 @@ private:
 
 class ReceiverPreferences {
 public:
+    ReceiverPreferences(ProbabilityGenerator p = probability_generator): prob_rand(p){};
     using preferences_t = std::map<IPackageReceiver*, double>;
     using const_iterator = preferences_t::const_iterator;
     using iterator = preferences_t::iterator;
@@ -71,10 +73,11 @@ public:
     void add_receiver(IPackageReceiver*);
     void remove_receiver(IPackageReceiver*);
     IPackageReceiver* choose_receiver();
-    ProbabilityGenerator prob_rand = [](){ return (double)rand() / RAND_MAX; };
+    //ProbabilityGenerator prob_rand = [](){ return (double)rand() / RAND_MAX; };
     preferences_t& get_preferences() { return preferences_map;};
 private:
     preferences_t preferences_map;
+    ProbabilityGenerator prob_rand;
 };
 
 class PackageSender {

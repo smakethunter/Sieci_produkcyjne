@@ -3,8 +3,43 @@
 //
 #include <random>
 #include "helpers.hpp"
+ProbabilityGenerator probability_generator=[](){return rand()/ RAND_MAX;};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 double prob_rand() {return (double)rand()/RAND_MAX;}
+
 void add_nr(int nr, std::map<int,double>& map) {
 
     map.insert(std::make_pair(nr, 0));
@@ -83,3 +118,5 @@ int choose_nr(double mocked_prob,std::map<int,double> &preferences_map) {
 
 
 }
+
+
