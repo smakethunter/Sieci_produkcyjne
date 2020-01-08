@@ -123,8 +123,8 @@ public:
     std::deque<Package>::iterator begin() override { return queue_pointer->begin();}
     std::deque<Package>::iterator end() override { return queue_pointer->end();}
     std::deque<Package>::reverse_iterator rbegin() override { return queue_pointer->rbegin();}
-    std::deque<Package>::const_iterator cbegin() const override { return queue_pointer->cbegin();}
-    std::deque<Package>::const_iterator cend() const override { return queue_pointer->cend();}
+    [[nodiscard]] std::deque<Package>::const_iterator cbegin() const override { return queue_pointer->cbegin();}
+    [[nodiscard]] std::deque<Package>::const_iterator cend() const override { return queue_pointer->cend();}
     int size(){return queue_pointer->size();}
 
 
