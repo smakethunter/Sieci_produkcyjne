@@ -14,6 +14,9 @@
 #include <vector>
 #include <functional>
 #include "helpers.hpp"
+class Node{
+
+};
 
 enum class ReceiverType{
 Ramp,Worker,Storehouse
@@ -36,7 +39,7 @@ private:
 
 };
 
-class Storehouse : public IPackageReceiver{
+class Storehouse : public IPackageReceiver, public Node{
 public:
     Storehouse(ElementID id_, std::unique_ptr<IPackageStockpile> d):
     IPackageReceiver(ReceiverType::Storehouse), id(id_),queue_pointer(std::move(d)){}
@@ -91,7 +94,7 @@ public:
     ReceiverPreferences receiver_preferences_;
 };
 
-class Ramp : public PackageSender{
+class Ramp : public PackageSender, public Node{
 public:
     Ramp (ElementID id_, TimeOffset to_):  id(id_),to(to_){}
     void deliver_goods(Time t);
@@ -104,7 +107,7 @@ private:
 
 };
 
-class Worker: public PackageSender, public IPackageReceiver {
+class Worker: public PackageSender, public IPackageReceiver, public Node {
 public:
     Worker(ElementID id_, TimeOffset to_,std::unique_ptr<IPackageQueue> q);
     ~Worker()= default;
