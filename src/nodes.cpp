@@ -122,9 +122,9 @@ IPackageReceiver *ReceiverPreferences::choose_receiver() {
 void PackageSender::push_package(Package &&p) {
 
 
-
-        sending_buffer=std::make_optional<Package>(std::move(p));
-
+    if (!sending_buffer.has_value()){
+        sending_buffer = std::make_optional<Package>(std::move(p));
+}
 
 }
 
