@@ -32,8 +32,8 @@ public:
 
     virtual int size() const=0;
 
-    virtual std::deque<Package>::iterator begin()=0;
-    virtual std::deque<Package>::iterator end()=0;
+    virtual const_iterator begin() const =0;
+    virtual const_iterator end()const =0;
     virtual std::deque<Package>::reverse_iterator rbegin()=0;
     virtual const_iterator cbegin() const =0;
     virtual const_iterator cend() const =0;
@@ -62,8 +62,8 @@ public:
 
     PackageQueueType get_queue_type() override ;
     int size() const override;
-    std::deque<Package>::iterator begin() override {return package_queue.begin();}
-    std::deque<Package>::iterator end() override {return package_queue.end();}
+    const_iterator begin() const override {return package_queue.begin();}
+    const_iterator end() const override {return package_queue.end();}
     std::deque<Package>::reverse_iterator rbegin() override {return package_queue.rbegin();}
     [[nodiscard]] const_iterator cbegin() const override { return package_queue.cbegin(); }
     [[nodiscard]] const_iterator cend() const override { return package_queue.cend();}

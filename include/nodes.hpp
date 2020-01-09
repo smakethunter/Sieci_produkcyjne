@@ -25,34 +25,34 @@ Ramp,Worker,Storehouse
 class IPackageReceiver{
 public:
     IPackageReceiver(){};
-    IPackageReceiver(ReceiverType r): receiverType(r){};
+    //IPackageReceiver(ReceiverType r): receiverType(r){};
     virtual void receive_package(Package&& p)=0;
     virtual ElementID get_id() const =0;
-    ReceiverType get_receiver_type()const {return receiverType;}
-    virtual std::deque<Package>::iterator begin()=0;
-    virtual std::deque<Package>::iterator end()=0;
-    virtual std::deque<Package>::reverse_iterator rbegin()=0;
-    virtual std::deque<Package>::const_iterator cbegin() const=0;
-    virtual std::deque<Package>::const_iterator cend() const =0;
+    //ReceiverType get_receiver_type()const {return receiverType;}
+    virtual IPackageStockpile::const_iterator begin() const =0;
+    virtual IPackageStockpile::const_iterator end() const =0;
+    //virtual std::deque<Package>::reverse_iterator rbegin()=0;
+    virtual IPackageStockpile::const_iterator cbegin() const=0;
+    virtual IPackageStockpile::const_iterator cend() const =0;
 private:
-    ReceiverType receiverType;
+    //ReceiverType receiverType;
 
 };
 
 class Storehouse : public IPackageReceiver, public Node{
 public:
     Storehouse(ElementID id_, std::unique_ptr<IPackageStockpile> d):
-    IPackageReceiver(ReceiverType::Storehouse), id(id_),queue_pointer(std::move(d)){}
+    IPackageReceiver(), id(id_),queue_pointer(std::move(d)){}
     ~Storehouse()= default;
 public:
     ElementID  get_id() const override { return id;};
 public:
     void receive_package(Package&& p) override;
-    std::deque<Package>::iterator begin() override { return queue_pointer->begin();}
-    std::deque<Package>::iterator end() override { return queue_pointer->end();}
-    std::deque<Package>::reverse_iterator rbegin() override { return queue_pointer->rbegin();}
-    std::deque<Package>::const_iterator cbegin() const override { return queue_pointer->cbegin();}
-    std::deque<Package>::const_iterator cend() const override { return queue_pointer->cend();}
+    IPackageStockpile::const_iterator begin() const  override { return queue_pointer->begin();}
+    IPackageStockpile::const_iterator end() const override { return queue_pointer->end();}
+    //std::deque<Package>::reverse_iterator rbegin() override { return queue_pointer->rbegin();}
+    IPackageStockpile::const_iterator cbegin() const override { return queue_pointer->cbegin();}
+    IPackageStockpile::const_iterator cend() const override { return queue_pointer->cend();}
     int size(){return queue_pointer->size();}
 
 private:
@@ -120,11 +120,11 @@ public:
     TimeOffset get_processing_duration(){ return  to;};
 
     Time get_package_processing_start_time(){ return processing_start_time;};
-    std::deque<Package>::iterator begin() override { return queue_pointer->begin();}
-    std::deque<Package>::iterator end() override { return queue_pointer->end();}
-    std::deque<Package>::reverse_iterator rbegin() override { return queue_pointer->rbegin();}
-    [[nodiscard]] std::deque<Package>::const_iterator cbegin() const override { return queue_pointer->cbegin();}
-    [[nodiscard]] std::deque<Package>::const_iterator cend() const override { return queue_pointer->cend();}
+    IPackageStockpile::const_iterator begin() const override { return queue_pointer->begin();}
+    IPackageStockpile::const_iterator end() const override { return queue_pointer->end();}
+    //std::deque<Package>::reverse_iterator rbegin() override { return queue_pointer->rbegin();}
+    [[nodiscard]] IPackageStockpile::const_iterator cbegin() const override { return queue_pointer->cbegin();}
+    [[nodiscard]] IPackageStockpile::const_iterator cend() const override { return queue_pointer->cend();}
     int size(){return queue_pointer->size();}
 
 

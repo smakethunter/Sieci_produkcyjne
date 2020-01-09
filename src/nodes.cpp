@@ -5,7 +5,7 @@
 #include "nodes.hpp"
 
 Worker::Worker(ElementID id_, TimeOffset to_, std::unique_ptr<IPackageQueue> q) :
-       PackageSender(), IPackageReceiver(ReceiverType::Worker),id(id_),to(to_),processing_start_time(0), queue_pointer(std::move(q)){
+       PackageSender(), IPackageReceiver(),id(id_),to(to_),processing_start_time(0), queue_pointer(std::move(q)){
 
 }
 
@@ -42,7 +42,11 @@ void Storehouse::receive_package(Package &&p) {
 void ReceiverPreferences::add_receiver(IPackageReceiver * r) {
 
    preferences_map.insert(std::make_pair(r,0));
-   int all=int(std::size(preferences_map));
+    double len=double(std::size(preferences_map));
+   for (auto& i : preferences_map){
+       i.second=1/len;
+   }
+   /*int all=int(std::size(preferences_map));
    std::vector<double> random_values;
    random_values.reserve(all);
 for (int i = 0;i < all; i++){
@@ -58,7 +62,7 @@ int a=0;
 for (auto& i: preferences_map){
     i.second=random_values[a];
     a++;
-}
+}*/
 
 
 }
@@ -116,10 +120,11 @@ IPackageReceiver *ReceiverPreferences::choose_receiver() {
 
 
 void PackageSender::push_package(Package &&p) {
-    if(!sending_buffer){
 
-        sending_buffer.emplace(std::move(p));
-    }
+
+
+        sending_buffer=std::make_optional<Package>(std::move(p));
+
 
 }
 
@@ -129,6 +134,7 @@ std::optional<Package>& PackageSender::get_sending_buffer() {
 }
 
 void PackageSender::send_package() {
+    if(sending_buffer.has_value()){
     Package p(std::move(sending_buffer.value()));
 
 
@@ -138,16 +144,23 @@ void PackageSender::send_package() {
 
     reciever->receive_package(std::move(p));
     sending_buffer.reset();
+    }
 }
 
 void Ramp::deliver_goods(Time t) {
     TimeOffset interval=get_delivery_interval();
+
    if(sending_buffer.has_value()){
         if(t%interval==0){
 
             send_package();
 
         }
+    }
+
+   else{
+
+        push_package(Package());
     }
 
 
