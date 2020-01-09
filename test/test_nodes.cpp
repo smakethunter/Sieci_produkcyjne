@@ -47,7 +47,7 @@ TEST(WorkerTest, HasBuffer) {
 
 TEST(RampTest, IsDeliveryOnTime) {
 
-    Ramp r(1, 2);
+    Ramp r(1, 3);
     // FIXME: poprawić w docelowej wersji (konstruktor powinien posiadać argument domyślny)
 //    auto recv = std::make_unique<Storehouse>(1);
     auto recv = std::make_unique<Storehouse>(1, std::make_unique<PackageQueue>(PackageQueueType::LIFO));
@@ -55,14 +55,16 @@ TEST(RampTest, IsDeliveryOnTime) {
     r.receiver_preferences_.add_receiver(recv.get());
 
     r.deliver_goods(1);
-
+    std::cout<<r.get_sending_buffer().value().get_id()<<std::endl;
     ASSERT_TRUE(r.get_sending_buffer().has_value());
 
+    r.send_package();
 
-    r.deliver_goods(2);
-    ASSERT_FALSE(r.get_sending_buffer().has_value());
 
     r.deliver_goods(3);
+    ASSERT_FALSE(r.get_sending_buffer().has_value());
+
+    r.deliver_goods(4);
     ASSERT_TRUE(r.get_sending_buffer().has_value());
 }
 

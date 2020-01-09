@@ -124,7 +124,7 @@ void PackageSender::push_package(Package &&p) {
 
     if (!sending_buffer.has_value()){
         sending_buffer = std::make_optional<Package>(std::move(p));
-}
+    }
 
 }
 
@@ -150,18 +150,13 @@ void PackageSender::send_package() {
 void Ramp::deliver_goods(Time t) {
     TimeOffset interval=get_delivery_interval();
 
-   if(sending_buffer.has_value()){
-        if(t%interval==0){
+   if(!sending_buffer.has_value()) {
+       if ((t-1) % interval == 0 || t==1) {
 
-            send_package();
+           push_package(Package());
 
-        }
-    }
-
-   else{
-
-        push_package(Package());
-    }
+       }
+   }
 
 
 }
