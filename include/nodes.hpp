@@ -86,6 +86,8 @@ private:
 class PackageSender {
 public:
 
+    PackageSender(PackageSender&&)=default;
+    PackageSender(){};
     void send_package();
     std::optional<Package>& get_sending_buffer();
     void push_package(Package&&);
