@@ -55,7 +55,7 @@ TEST(RampTest, IsDeliveryOnTime) {
     r.receiver_preferences_.add_receiver(recv.get());
 
     r.deliver_goods(1);
-    std::cout<<r.get_sending_buffer().value().get_id()<<std::endl;
+
     ASSERT_TRUE(r.get_sending_buffer().has_value());
 
     r.send_package();
