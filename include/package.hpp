@@ -12,7 +12,7 @@ public:
     Package();
 
     Package (Package&& p);
-
+    Package(int id_): product_id(id_){};
     ~Package();
     Package& operator=(Package&&)= default;
     ElementID get_id() const;

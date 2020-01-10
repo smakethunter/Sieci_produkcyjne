@@ -18,8 +18,8 @@ set(SOURCE_FILES
 
         src/helpers.cpp)
 
-add_executable(network__debug ${SOURCE_FILES} ../network_exec.cpp)
-
+#add_executable(network__debug ${SOURCE_FILES} ../network_exec.cpp)
+add_executable(netsim__nodes__debug ${SOURCE_FILES} ../network_exec.cpp)
 # == Unit testing using Google Testing Framework ==
 
 set(SOURCES_FILES_TESTS
@@ -27,17 +27,21 @@ set(SOURCES_FILES_TESTS
 
         #test/test_random.cpp
         #test/test_network.cpp
+
+        test/test_package.cpp
+        test/test_storage_types.cpp
         test/test_nodes.cpp
         )
 
 
 add_executable(network__test ${SOURCE_FILES} ${SOURCES_FILES_TESTS} test/main_gtest.cpp)
-
+#add_executable(netsim__nodes__test ${SOURCE_FILES} ${SOURCES_FILES_TESTS} test/main_gtest.cpp)
 target_include_directories(network__test PUBLIC
         ../../googletest-master/googlemock/include
         ../../googletest-master/googletest/include
         )
 
 add_subdirectory(googletest-master)
-
+target_compile_definitions(network__test PUBLIC EXERCISE_ID=EXERCISE_ID_NODES)
 target_link_libraries(network__test gmock)
+

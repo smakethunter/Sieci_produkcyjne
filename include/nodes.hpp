@@ -14,6 +14,8 @@
 #include <vector>
 #include <functional>
 #include "helpers.hpp"
+#include "config.hpp"
+
 class Node{
 
 };

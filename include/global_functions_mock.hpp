@@ -8,7 +8,7 @@
 #include "helpers.hpp"
 
 // -------
-
+//ProbabilityGenerator global_probability_generator=probability_generator;
 class IGlobalFunctionsMock {
 public:
     virtual double generate_canonical() = 0;
@@ -36,7 +36,7 @@ public:
         #if (defined EXERCISE_ID && EXERCISE_ID == EXERCISE_ID_NODES)
 //        probability_generator = []() { return 0; };
         #else
-        //probability_generator = probability_generator;
+        probability_generator = global_probability_generator;
         #endif
     }
 
