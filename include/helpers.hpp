@@ -7,7 +7,7 @@
 #include "types.hpp"
 #include <functional>
 #include <map>
-extern ProbabilityGenerator probability_generator;
+extern ProbabilityGenerator global_probability_generator;
 
 
 

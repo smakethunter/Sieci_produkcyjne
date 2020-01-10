@@ -3,7 +3,7 @@
 //
 #include <random>
 #include "helpers.hpp"
-ProbabilityGenerator probability_generator=[](){return (double)rand()/ RAND_MAX;};
+ProbabilityGenerator global_probability_generator=[](){return (double)rand()/ RAND_MAX;};
 
 
 

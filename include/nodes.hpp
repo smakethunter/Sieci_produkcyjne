@@ -65,7 +65,7 @@ private:
 
 class ReceiverPreferences {
 public:
-    ReceiverPreferences(ProbabilityGenerator p = probability_generator): prob_rand(p){};
+    ReceiverPreferences(ProbabilityGenerator p = global_probability_generator): prob_rand(p){};
     using preferences_t = std::map<IPackageReceiver*, double>;
     using const_iterator = preferences_t::const_iterator;
     using iterator = preferences_t::iterator;
