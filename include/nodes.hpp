@@ -130,12 +130,14 @@ public:
     [[nodiscard]] IPackageStockpile::const_iterator cbegin() const override { return queue_pointer->cbegin();}
     [[nodiscard]] IPackageStockpile::const_iterator cend() const override { return queue_pointer->cend();}
     int size(){return queue_pointer->size();}
-
-
+    void start_process(Package&& p);
+    std::optional<Package>& get_processing_buffer();
 private:
     ElementID id;
     TimeOffset to;
     Time processing_start_time;
+protected:
+    std::optional<Package> processing_buffer;
 public:
     std::unique_ptr<IPackageQueue> queue_pointer;
 

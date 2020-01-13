@@ -41,6 +41,7 @@ TEST(WorkerTest, HasBuffer) {
 
     ASSERT_TRUE(buffer.has_value());
     EXPECT_EQ(buffer.value().get_id(), 1);
+    EXPECT_FALSE(w.get_processing_buffer().has_value());
 }
 
 // -----------------
