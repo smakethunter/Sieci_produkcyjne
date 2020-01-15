@@ -20,7 +20,7 @@ TEST(WorkerTest, HasBuffer) {
     // Test scenariusza opisanego na stronie:
     // http://home.agh.edu.pl/~mdig/dokuwiki/doku.php?id=teaching:programming:soft-dev:topics:net-simulation:part_nodes#bufor_aktualnie_przetwarzanego_polproduktu
 
-    Worker w(1, 2, std::make_unique<PackageQueue>(PackageQueueType::FIFO));
+    Worker w(1, 3, std::make_unique<PackageQueue>(PackageQueueType::FIFO));
     Time t = 1;
 
     // FIXME: poprawić w docelowej wersji (dodać konstruktor z ID półproduktu)
@@ -36,12 +36,21 @@ TEST(WorkerTest, HasBuffer) {
     ++t;
     w.receive_package(Package());
     w.do_work(t);
+    t++;
+    w.do_work(t);
     auto& buffer = w.get_sending_buffer();
 
 
     ASSERT_TRUE(buffer.has_value());
     EXPECT_EQ(buffer.value().get_id(), 1);
     EXPECT_FALSE(w.get_processing_buffer().has_value());
+
+    Storehouse s(10,std::make_unique<PackageQueue>(PackageQueueType::FIFO));
+    w.receiver_preferences_.add_receiver(&s);
+
+    w.send_package();
+    EXPECT_FALSE(w.get_sending_buffer().has_value());
+    EXPECT_EQ(s.cbegin()->get_id(),1);
 }
 
 // -----------------
