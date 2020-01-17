@@ -37,6 +37,8 @@ public:
     virtual std::deque<Package>::reverse_iterator rbegin()=0;
     virtual const_iterator cbegin() const =0;
     virtual const_iterator cend() const =0;
+    virtual  ~IPackageStockpile() = default;
+    virtual PackageQueueType get_queue_type()const = 0;
 };
 
 class IPackageQueue : public IPackageStockpile{
@@ -46,7 +48,8 @@ public:
 
     virtual Package pop()  = 0 ;
 
-    virtual PackageQueueType get_queue_type() = 0;
+
+
 
 
 
@@ -60,7 +63,7 @@ public:
 
     Package pop() override ;
 
-    PackageQueueType get_queue_type() override ;
+    PackageQueueType get_queue_type() const override { return queueType;}
     int size() const override;
     const_iterator begin() const override {return package_queue.begin();}
     const_iterator end() const override {return package_queue.end();}

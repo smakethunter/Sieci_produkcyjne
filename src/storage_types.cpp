@@ -21,9 +21,7 @@ Package PackageQueue::pop() {
     return ret;
 }
 
-PackageQueueType PackageQueue::get_queue_type() {
-    return queueType;
-}
+
 
 void PackageQueue::push(Package &&p) {
 

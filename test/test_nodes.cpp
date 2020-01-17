@@ -105,6 +105,7 @@ TEST(ReceiverPreferencesTest, RemoveReceiversRescalesProbability) {
     rp.add_receiver(&r2);
 
     rp.remove_receiver(&r2);
+    std::cout<<rp.get_preferences().begin()->second;
     ASSERT_EQ(rp.get_preferences().find(&r2), rp.get_preferences().end());
     EXPECT_EQ(rp.get_preferences().at(&r1), 1.0);
 }

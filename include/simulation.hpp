@@ -4,7 +4,14 @@
 
 #ifndef SIECI_PRODUKCYJNE_SIMULATION_HPP
 #define SIECI_PRODUKCYJNE_SIMULATION_HPP
-void simulate();
+
+#include "factory.hpp"
+
+
+void simulate( Factory& f, TimeOffset d, std::function<void (Factory&, Time)>);
+
+
+
 #endif //SIECI_PRODUKCYJNE_SIMULATION_HPP
 
 // testing

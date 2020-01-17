@@ -4,4 +4,10 @@
 
 #include "reports.hpp"
 
+bool SpecificTurnsReportNotifier::should_generate_report(Time t) {
+    return (intervals.find(t) != intervals.end());
+}
 
+bool IntervalReportNotifier::should_generate_report(Time t) {
+    return t==time;
+}

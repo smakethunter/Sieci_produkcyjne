@@ -4,8 +4,8 @@
 
 #include "nodes.hpp"
 
-Worker::Worker(ElementID id_, TimeOffset to_, std::unique_ptr<IPackageQueue> q) :
-       PackageSender(), IPackageReceiver(),id(id_),to(to_),processing_start_time(0), queue_pointer(std::move(q)){
+Worker::Worker(ElementID id_, TimeOffset to_, std::unique_ptr<IPackageQueue> q ) :
+       PackageSender(), IPackageReceiver() ,id(id_),to(to_),processing_start_time(0), queue_pointer(std::move(q)),receiverType(ReceiverType::WORKER){
 
 }
 
@@ -25,8 +25,8 @@ void Worker::do_work(Time t) {
 if (processing_start_time==0){
     processing_start_time=t;
 }
-if (to-1==t-processing_start_time){
-    //send_package();
+if (to==t-processing_start_time){
+
     push_package(std::move(*processing_buffer));
     processing_start_time=0;
     processing_buffer.reset();
@@ -49,6 +49,7 @@ void Storehouse::receive_package(Package &&p) {
     queue_pointer->push(std::move(p));
 
 }
+
 
 
 
@@ -80,24 +81,11 @@ for (auto& i: preferences_map){
 
 }
 
-void ReceiverPreferences::remove_receiver(IPackageReceiver * r) {
+void ReceiverPreferences::remove_receiver(IPackageReceiver* r) {
     preferences_map.erase(r);
-    int all=int(std::size(preferences_map));
-    std::vector<double> random_values;
-    random_values.reserve(all);
-    for (int i = 0;i < all; i++){
-        random_values.push_back(prob_rand());
-    }
-    double sum_of_elems = std::accumulate(random_values.begin(), random_values.end(),double(0));
-
-    for (auto& i:random_values){
-        i/=sum_of_elems;
-
-    }
-    int a=0;
-    for (auto& i: preferences_map){
-        i.second=random_values[a];
-        a++;
+    double len=double(std::size(preferences_map));
+    for (auto& i : preferences_map){
+        i.second=1/len;
     }
 }
 
@@ -173,5 +161,7 @@ void Ramp::deliver_goods(Time t) {
 
 
 }
+
+
 // funkcje testyjace na szybkosci dystrybuante
 

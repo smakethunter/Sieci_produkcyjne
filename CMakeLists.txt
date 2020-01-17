@@ -16,7 +16,11 @@ set(SOURCE_FILES
 
         src/network.cpp
 
-        src/helpers.cpp)
+        src/helpers.cpp
+        src/factory.cpp
+        src/simulation.cpp
+        src/reports.cpp
+        )
 
 #add_executable(network__debug ${SOURCE_FILES} ../network_exec.cpp)
 add_executable(netsim__nodes__debug ${SOURCE_FILES} ../network_exec.cpp)
@@ -30,8 +34,9 @@ set(SOURCES_FILES_TESTS
 
         test/test_package.cpp
         test/test_storage_types.cpp
-        test/test_nodes.cpp
-        )
+        #test/test_nodes.cpp
+        test/test_Factory.cpp
+        test/test_simulate.cpp)
 
 
 add_executable(network__test ${SOURCE_FILES} ${SOURCES_FILES_TESTS} test/main_gtest.cpp)
