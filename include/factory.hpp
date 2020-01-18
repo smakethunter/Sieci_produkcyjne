@@ -1,4 +1,6 @@
-
+//
+// Created by smaket on 06.12.2019.
+//
 #ifndef NETSIM_FACTORY_HPP
 #define NETSIM_FACTORY_HPP
 
@@ -54,7 +56,7 @@ enum class NodeColor { UNVISITED, VISITED, VERIFIED };
 
 class Factory {
 public:
-    Factory() : ramps_(), workers_(), storehouses_() {};
+    Factory() : rampCollection(), workers_(), storehouseCollection() {};
 
     void add_ramp(Ramp && );
     void remove_ramp(ElementID id);
@@ -64,8 +66,8 @@ public:
 
     NodeCollection<Ramp>::const_iterator ramp_cbegin() const;
     NodeCollection<Ramp>::const_iterator ramp_cend() const;
-    NodeCollection<Ramp>::iterator ramp_begin() { return ramps_.begin();};
-    NodeCollection<Ramp>::iterator ramp_end() {return ramps_.end();};
+    NodeCollection<Ramp>::iterator ramp_begin() { return rampCollection.begin();};
+    NodeCollection<Ramp>::iterator ramp_end() {return rampCollection.end();};
 
     void add_worker(Worker && );
     void remove_worker(ElementID id);
@@ -101,9 +103,9 @@ private:
     template<typename Node>
     void remove_receiver( NodeCollection<Node>& collection, ElementID id);
 
-    NodeCollection<Ramp> ramps_;
+    NodeCollection<Ramp> rampCollection;
     NodeCollection<Worker> workers_;
-    NodeCollection<Storehouse> storehouses_;
+    NodeCollection<Storehouse> storehouseCollection;
 };
 
 

@@ -41,7 +41,7 @@ void Worker::start_process(Package&& p) {
 
 }
 
-std::optional<Package> &Worker::get_processing_buffer() {
+const std::optional<Package> &Worker::get_processing_buffer() const{
     return processing_buffer;
 }
 
@@ -129,7 +129,7 @@ void PackageSender::push_package(Package &&p) {
 
 }
 
-std::optional<Package>& PackageSender::get_sending_buffer() {
+const std::optional<Package>& PackageSender::get_sending_buffer()const {
 
     return sending_buffer;
 }

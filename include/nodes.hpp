@@ -34,6 +34,7 @@ public:
     //virtual std::deque<Package>::reverse_iterator rbegin()=0;
     virtual IPackageStockpile::const_iterator cbegin() const=0;
     virtual IPackageStockpile::const_iterator cend() const =0;
+    virtual IPackageStockpile* get_queue() const =0;
 
 
 };
@@ -57,7 +58,7 @@ public:
     IPackageStockpile::const_iterator cbegin() const override { return queue_pointer->cbegin();}
     IPackageStockpile::const_iterator cend() const override { return queue_pointer->cend();}
     int size(){return queue_pointer->size();}
-
+    IPackageStockpile* get_queue() const override { return &(*queue_pointer);}
 private:
     ElementID id;
     std::unique_ptr<IPackageStockpile> queue_pointer;
@@ -94,7 +95,7 @@ public:
     //PackageSender(PackageSender&&)=default;
     PackageSender()= default;
     void send_package();
-    std::optional<Package>& get_sending_buffer();
+    const std::optional<Package>& get_sending_buffer() const;
     void push_package(Package&&);
     std::optional<Package> sending_buffer;
     virtual ElementID get_id() const=0;
@@ -129,7 +130,7 @@ public:
 
     TimeOffset get_processing_duration()const{ return  to;} ;
 
-    Time get_package_processing_start_time(){ return processing_start_time;};
+    Time get_package_processing_start_time() const { return processing_start_time;};
     IPackageStockpile::const_iterator begin() const override { return queue_pointer->begin();}
     IPackageStockpile::const_iterator end() const override { return queue_pointer->end();}
     //std::deque<Package>::reverse_iterator rbegin() override { return queue_pointer->rbegin();}
@@ -137,9 +138,10 @@ public:
     [[nodiscard]] IPackageStockpile::const_iterator cend() const override { return queue_pointer->cend();}
     int size(){return queue_pointer->size();}
     void start_process(Package&& p);
-    std::optional<Package>& get_processing_buffer();
+    const std::optional<Package>& get_processing_buffer() const;
     ReceiverType get_receiver_type() const override { return receiverType;}
     PackageQueueType get_queue_type()const { return queue_pointer->get_queue_type();};
+    IPackageStockpile* get_queue() const override { return &(*queue_pointer);}
 private:
     ElementID id;
     TimeOffset to;
