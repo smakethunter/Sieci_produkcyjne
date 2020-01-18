@@ -61,7 +61,7 @@ bool Factory::has_reachable_storehouse(const PackageSender* sender, std::map<con
     bool node_has_link = false;
 
     Worker* workerCollectionptr;
-    PackageSender* sendrecv_ptr;
+    PackageSender* recveiver;
 
 
         for (auto receiver: sender->receiver_preferences_.get_preferences()) {
@@ -71,7 +71,7 @@ bool Factory::has_reachable_storehouse(const PackageSender* sender, std::map<con
                 workerCollectionptr = dynamic_cast<Worker *>(receiver.first);
 
 
-                sendrecv_ptr = dynamic_cast<PackageSender *>(workerCollectionptr);
+                recveiver = dynamic_cast<PackageSender *>(workerCollectionptr);
 
                 if (workerCollectionptr == sender) {
 
@@ -80,8 +80,8 @@ bool Factory::has_reachable_storehouse(const PackageSender* sender, std::map<con
 
                 node_has_link = true;
 
-                if (NodeStatus[sendrecv_ptr] == NodeColor::UNVISITED) {
-                    Factory::has_reachable_storehouse(sendrecv_ptr, NodeStatus);
+                if (NodeStatus[recveiver] == NodeColor::UNVISITED) {
+                    Factory::has_reachable_storehouse(recveiver, NodeStatus);
                 }
             }
         }
@@ -90,7 +90,7 @@ bool Factory::has_reachable_storehouse(const PackageSender* sender, std::map<con
 
         if (node_has_link) { return true; }
 
-        else { throw std::logic_error("Storehouse is not reachable"); }
+        else { throw std::logic_error("Storehouse disconnected"); }
 
 
 }
@@ -155,43 +155,57 @@ void Factory::remove_receiver( NodeCollection<Node>& collection, ElementID id) {
     }
 }
 
+std::string queue_type_to_str(PackageQueueType p){
+    return p==PackageQueueType ::FIFO? "FIFO" : "LIFO";
+}
+enum class ObjectType{
+    WORKER, STOREHOUSE, RAMP, LINK
+};
+std::string object_type_to_str(ReceiverType r){
+    if (r==ReceiverType::WORKER){
+        return "worker-";
 
-enum class ObjectType{WORKER, STOREHOUSE, RAMP, LINK};
+    }
+    else if(r==ReceiverType::STOREHOUSE){
+        return "store-";
+    }
+    return "empty";
+}
 
 std::pair<ObjectType, std::map<std::string,std::string>>parse_line(std::string& line) {
-    std::vector<std::string> tokens;
+    std::vector<std::string> ObjectData;
     std::string token;
 
     std::istringstream token_stream(line);
     char delimiter = ' ';
 
     while (std::getline(token_stream, token, delimiter)) {
-        tokens.push_back(token);
+        ObjectData.push_back(token);
     }
 
     ObjectType type;
 
-    if (tokens[0] == "WORKER")
+    if (ObjectData[0] == "WORKER")
         type = ObjectType::WORKER;
-    else if (tokens[0] == "LINK")
+    else if (ObjectData[0] == "LINK")
         type = ObjectType::LINK;
-    else if (tokens[0] == "STOREHOUSE")
+    else if (ObjectData[0] == "STOREHOUSE")
         type = ObjectType::STOREHOUSE;
     else
         type = ObjectType::RAMP;
 
-    std::string temp1;
-    std::string temp2;
+    std::string parameter;
+    std::string value;
     std::istringstream temp_string;
-    std::map<std::string,std::string> map_of_tokens;
-    for(auto iterator = tokens.begin() + 1; iterator!=tokens.end(); iterator++){
+    std::map<std::string,std::string> map_of_ObjectData;
+    for(auto iterator = ObjectData.begin() + 1; iterator!=ObjectData.end(); iterator++){
         temp_string = std::istringstream(*iterator);
-        std::getline(temp_string, temp1, '=');
-        std::getline(temp_string, temp2, '=');
-        map_of_tokens[temp1]=temp2;
+        std::getline(temp_string, parameter, '=');
+        std::getline(temp_string, value, '=');
+        map_of_ObjectData[parameter]=value;
     }
 
-    return std::make_pair(type, map_of_tokens);
+    return std::make_pair(type, map_of_ObjectData);
 }
 
 
@@ -210,12 +224,12 @@ Factory load_factory_structure(std::istream& is){
 
     std::string source_id;
     std::string source_type;
-    std::string temp_dest_id;
-    std::string temp_dest_type;
+    std::string dest_id;
+    std::string dest_type;
 
     int temp_id;
     int temp_target_id;
-    int temp_processing_time;
+    int processing_time;
     PackageQueueType queue_type;
 
     IPackageReceiver* receiver_pointer;
@@ -223,15 +237,15 @@ Factory load_factory_structure(std::istream& is){
     for(auto& elem: nodes_vector){
         if(elem.first == ObjectType::WORKER){
             temp_id = std::stoi(elem.second["id"]);
-            temp_processing_time = std::stoi(elem.second["processing-time"]);
+            processing_time = std::stoi(elem.second["processing-time"]);
             if(elem.second["queue-type"] == "LIFO") queue_type = PackageQueueType::LIFO;
             else queue_type = PackageQueueType::FIFO;
-            factory_.add_worker(Worker(temp_id, temp_processing_time, std::make_unique<PackageQueue>(queue_type)));
+            factory_.add_worker(Worker(temp_id, processing_time, std::make_unique<PackageQueue>(queue_type)));
         }
         if(elem.first == ObjectType::RAMP){
             temp_id = std::stoi(elem.second["id"]);
-            temp_processing_time = std::stoi(elem.second["delivery-interval"]);
-            factory_.add_ramp(Ramp(temp_id, temp_processing_time));
+            processing_time = std::stoi(elem.second["delivery-interval"]);
+            factory_.add_ramp(Ramp(temp_id, processing_time));
         }
         if(elem.first == ObjectType::STOREHOUSE){
             temp_id = std::stoi(elem.second["id"]);
@@ -245,11 +259,11 @@ Factory load_factory_structure(std::istream& is){
             std::getline(i_string, source_id, '-');
             temp_id = std::stoi(source_id);
 
-            std::getline(o_string, temp_dest_type, '-');
-            std::getline(o_string, temp_dest_id, '-');
-            temp_target_id = std::stoi(temp_dest_id);
+            std::getline(o_string, dest_type, '-');
+            std::getline(o_string, dest_id, '-');
+            temp_target_id = std::stoi(dest_id);
 
-            if(temp_dest_type == "worker"){
+            if(dest_type == "worker"){
                 receiver_pointer = &(*factory_.find_worker_by_id(temp_target_id));
             }
             else{
@@ -273,22 +287,29 @@ void save_factory_structure(Factory& factory, std::ostream& os){
     //STOREHOUSE id=<storehouse-id>
     os<<"; == LOADING RAMPS =="<<std::endl<<std::endl;
     std::for_each(factory.ramp_cbegin(),factory.ramp_cend(),[&os](const auto& r ){os << "LOADING_RAMP"<<" "<< "id=" << r.get_id() << " " <<"delivery-interval="<<r.get_delivery_interval()<<std::endl ;});
+    os<<std::endl<<std::endl;
     os<<"; == WORKERS =="<<std::endl<<std::endl;
-    std::for_each(factory.worker_cbegin(),factory.worker_cend(),[&os](const auto& r ){os<< "WORKER"<<" "<< "id=" << r.get_id() << " " <<"processing-time="<<r.get_processing_duration()<<std::endl;});
+    std::for_each(factory.worker_cbegin(),factory.worker_cend(),[&os](const auto& r ){os<< "WORKER"<<" "<< "id=" << r.get_id() << " " <<"processing-time="<<r.get_processing_duration()<<" queue-type="<<queue_type_to_str(r.get_queue_type())<<std::endl;});
+    os<<std::endl<<std::endl;
     os<<"; == STOREHOUSES =="<<std::endl<<std::endl;
     std::for_each(factory.storehouse_cbegin(),factory.storehouse_cend(),[&os](const auto& r ){os<<"STOREHOUSE"<<" "<< "id=" << r.get_id()<<std::endl ;});
 
     os<<"; == LINKS =="<<std::endl<<std::endl;
-    std::for_each(factory.ramp_cbegin(),factory.ramp_cend(),[&os](const auto& r ){std::ostringstream oss;
+    std::for_each(factory.ramp_cbegin(),factory.ramp_cend(),[&os](const auto& r ){
         ReceiverPreferences pref=r.receiver_preferences_;
         for (const auto& p : pref) {
-            os << "LINK" << " " << "src=" << r.get_id() << " " <<"dest="<<p.first->get_id()<<std::endl;
-        }});
-    std::for_each(factory.worker_cbegin(),factory.worker_cend(),[&os](const auto& r ){std::ostringstream oss;
+            os << "LINK" << " " << "src="<<"ramp-" << r.get_id() << " " <<"dest="<<object_type_to_str(p.first->get_receiver_type())<<p.first->get_id()<<std::endl;
+        }
+    os<<std::endl;});
+    std::for_each(factory.worker_cbegin(),factory.worker_cend(),[&os](const auto& r ){
         ReceiverPreferences pref=r.receiver_preferences_;
         for (const auto& p : pref) {
-            os << "LINK" << " " << "src=" << r.get_id() << " " <<"dest="<<p.first->get_id()<<std::endl;
-        };});
+            os << "LINK" << " " << "src=" <<"worker-"<< r.get_id() << " " <<"dest="<<object_type_to_str(p.first->get_receiver_type())<<p.first->get_id()<<std::endl;
+        }
+        os<<std::endl;
+        });
+// TODO: ramp-1, queue-type
+
 }
 
 
@@ -302,7 +323,7 @@ std::string ramp_to_str(Ramp r) {
 }
 std::string workerCollectionto_str(Worker w) {
     std::ostringstream oss;
-    oss << "WORKER"<<" "<< "id=" << w.get_id() << " " <<"processing-time="<<w.get_processing_duration()<<std::endl ;
+    oss << "WORKER"<<" "<< "id=" << w.get_id() << " " <<"processing-time="<<w.get_processing_duration()<<" queue-type="<<queue_type_to_str(w.get_queue_type())<<std::endl ;
     return oss.str();
 }
 std::string storehouse_to_str(Storehouse s){
@@ -326,9 +347,7 @@ std::string link_to_str(Worker& w){
     }
     return oss.str();
 }
-std::string queue_type_to_str(PackageQueueType p){
-    return p==PackageQueueType ::FIFO? "FIFO" : "LIFO";
-}
+
 void generate_structure_report(Factory& factory,  std::ostream& os) {
 
 
