@@ -308,7 +308,7 @@ void save_factory_structure(Factory& factory, std::ostream& os){
         }
         os<<std::endl;
         });
-// TODO: ramp-1, queue-type
+
 
 }
 
@@ -316,69 +316,76 @@ void save_factory_structure(Factory& factory, std::ostream& os){
 
 
 
-std::string ramp_to_str(Ramp r) {
-    std::ostringstream oss;
+void ramp_to_str(Ramp r,std::ostream& oss) {
+
     oss << "LOADING_RAMP"<<" "<< "id=" << r.get_id() << " " <<"delivery-interval="<<r.get_delivery_interval()<<std::endl ;
-    return oss.str();
+
 }
-std::string workerCollectionto_str(Worker w) {
-    std::ostringstream oss;
+void workerCollectionto_str(Worker w,std::ostream& oss) {
+
     oss << "WORKER"<<" "<< "id=" << w.get_id() << " " <<"processing-time="<<w.get_processing_duration()<<" queue-type="<<queue_type_to_str(w.get_queue_type())<<std::endl ;
-    return oss.str();
+
 }
-std::string storehouse_to_str(Storehouse s){
-    std::ostringstream oss;
+void storehouse_to_str(Storehouse s, std::ostream &oss){
+
     oss << "STOREHOUSE"<<" "<< "id=" << s.get_id()<<std::endl ;
-    return oss.str();
+
 }
-std::string link_to_str(Ramp& r){
-    std::ostringstream oss;
+void link_to_str(Ramp& r,std::ostream& oss){
+
     ReceiverPreferences pref=r.receiver_preferences_;
     for (const auto& p : pref) {
         oss << "LINK" << " " << "src=" << r.get_id() << " " <<"dest="<<p.first->get_id()<<std::endl;
     }
-    return oss.str();
+
 }
-std::string link_to_str(Worker& w){
-    std::ostringstream oss;
+void link_to_str(Worker& w,std::ostream &oss){
+
     ReceiverPreferences pref=w.receiver_preferences_;
     for (const auto& p : pref) {
         oss << "LINK" << " " << "src=" << w.get_id() << " " <<"dest="<<p.first->get_id()<<std::endl;
     }
-    return oss.str();
+
 }
 
-void generate_structure_report(Factory& factory,  std::ostream& os) {
+void generate_structure_report(const Factory& factory,  std::ostream& os) {
 
 
 
 
-    os << "== LOADING RAMPS ==" << std::endl << std::endl;
+   os<<std::endl<< "== LOADING RAMPS ==" << std::endl << std::endl;
     std::for_each(factory.ramp_cbegin(), factory.ramp_cend(), [&os](const auto &r) {
-        os << "LOADING_RAMP" << " " << "#" << r.get_id() << std::endl <<
-           "  Delivery interval: " << " " << r.get_delivery_interval() << std::endl <<
+        os << "LOADING RAMP" << " " << "#" << r.get_id() << std::endl <<
+           "  Delivery interval:" << " " << r.get_delivery_interval() << std::endl <<
            "  Receivers:" << std::endl;
-        std::for_each(r.get_receiver_preferences().begin(), r.get_receiver_preferences().end(),
-                      [&os](const auto &w) { os << "    worker " << "#" << w.first->get_id() << std::endl; });
+
+        for(auto w=r.get_receiver_preferences().cbegin(); w!= r.get_receiver_preferences().cend();++w)
+                      { os << "    worker " << "#" << w->first->get_id() << std::endl; }
+        os<<std::endl;
     });
 
-
+    os<<std::endl;
     os << "== WORKERS ==" << std::endl << std::endl;
-    std::for_each(factory.worker_cbegin(), factory.worker_cend(), [&os](const auto &r) {
+    std::for_each(factory.worker_cbegin(), factory.worker_cend(), [&os](auto &r) {
         os << "WORKER" << " " << "#" << r.get_id() << std::endl <<
-           "  Processing time: " << " " << r.get_processing_duration() << std::endl <<
+           "  Processing time:" << " " << r.get_processing_duration() << std::endl <<
            "  Queue type: " << queue_type_to_str(r.get_queue_type())<<std::endl
            << "  Receivers:" << std::endl;
-        std::for_each(r.get_receiver_preferences().begin(), r.get_receiver_preferences().end(),
-                      [&os](const auto &w) { os << "    storehouse " << "#" << w.first->get_id() << std::endl; });
-    });
+
+      for(auto w=r.get_receiver_preferences().cbegin(); w!= r.get_receiver_preferences().cend();++w)
+                   { os << "    storehouse " << "#" << w->first->get_id() << std::endl; }
+                      os<<std::endl;
+    }
+
+    );
+    os<<std::endl;
     os << "== STOREHOUSES ==" << std::endl << std::endl;
     std::for_each(factory.worker_cbegin(), factory.worker_cend(),
-                  [&os](const auto &r) { os << "STOREHOUSE" << " " << "#" << r.get_id() << std::endl; });
+                  [&os](const auto &r) { os << "STOREHOUSE" << " " << "#" << r.get_id() << std::endl<<std::endl; });
 
 }
 
-void generate_simulation_turn_report(Factory& factory, std::ostream& os, Time t){
+void generate_simulation_turn_report(const Factory& factory, std::ostream& os, Time t){
 //    === [ Turn: 2 ] ===
 //
 //    == WORKERS ==
@@ -400,54 +407,65 @@ void generate_simulation_turn_report(Factory& factory, std::ostream& os, Time t)
 //    Stock: #2, #4
     os<<"=== [ Turn: "<<t<<" ] ==="<<std::endl<<std::endl;
     os << "== WORKERS ==" << std::endl << std::endl;
+
     std::for_each(factory.worker_cbegin(), factory.worker_cend(), [&os](const auto &r) {
 
 
         os << "WORKER" << " " << "#" << r.get_id() << std::endl;
         if(r.get_processing_buffer().has_value()) {
-            os << "  PBuffer: " << " #" << r.get_processing_buffer()->get_id() << " (pt = "
+            os << "  PBuffer:" << " #" << r.get_processing_buffer()->get_id() << " (pt = "
                << r.get_package_processing_start_time() << ")" << std::endl;
         } else{
             os<<"  PBuffer: "<<"(empty)"<<std::endl;
         }
           os<< "  Queue: ";
-        if (r.get_queue()){
-            os<<r.get_queue()->begin()->get_id();
+        if (r.size()){
+            os<<"#"<<r.get_queue()->begin()->get_id();
             std::for_each(r.get_queue()->begin()+1, r.get_queue()->end(),
                           [&os](const auto &w) { os <<", "<< "#" << w.get_id() ; });
+
         }
         else{
             os<<"(empty)";
+
         }
 
 
         os <<std::endl;
         if(r.get_sending_buffer().has_value()){
         os  << "  SBuffer: #" <<r.get_sending_buffer()->get_id();
+            os<<std::endl;
+            os<<std::endl;
         }
         else{
             os<<"  SBuffer: (empty)";
-
+            os<<std::endl;
+            os<<std::endl;
         }
-        os<<std::endl;
+
 
 
     });
-    os<<std::endl<<std::endl;
-    os << "== STOREHOUSES ==" << std::endl << std::endl;
-    std::for_each(factory.worker_cbegin(), factory.worker_cend(),
+
+    os<<std::endl << "== STOREHOUSES ==" << std::endl << std::endl;
+    std::for_each(factory.storehouse_cbegin(), factory.storehouse_cend(),
                   [&os](const auto &r) { os << "STOREHOUSE" << " " << "#" << r.get_id() << std::endl;
                       os<< "  Stock: ";
-                      if (r.get_queue()){
+                      if (r.size()==1){
+                          os<<"#"<<r.get_queue()->cbegin()->get_id();
+
+                      }
+                      else if(r.size()>1){
                           os<<r.get_queue()->begin()->get_id();
-                          std::for_each(r.get_queue()->begin()+1, r.get_queue()->end(),
-                                        [&os](const auto &w) { os <<", "<< "#" << w.get_id() ; });
+                          for(auto w=r.get_queue()->cbegin()+1; w!= r.get_queue()->cend();++w)
+                          { os <<", "<< "#" << w->get_id() ; }
                       }
                       else{
                           os<<"(empty)";
                       }
 
 
+                      os <<std::endl;
                       os <<std::endl;
 
     });

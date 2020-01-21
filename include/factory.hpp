@@ -127,7 +127,7 @@ std::string storehouse_to_str(Storehouse s);
 
 std::string link_to_str(Ramp& r);
 std::string link_to_str(Worker& w);
-void generate_structure_report(Factory& f,  std::ostream& os);
-void generate_simulation_turn_report(Factory& f, std::ostream& os, Time t);
+void generate_structure_report(const Factory&,  std::ostream& os)  ;
+void generate_simulation_turn_report(const Factory&, std::ostream& os, Time t) ;
 
 #endif //NETSIM_FACTORY_HPP

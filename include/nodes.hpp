@@ -11,6 +11,7 @@
 #include <iomanip>
 #include <random>
 #include <cstdlib>
+#include <utility>
 #include <vector>
 #include <functional>
 #include "helpers.hpp"
@@ -39,41 +40,16 @@ public:
 
 };
 
-class Storehouse : public IPackageReceiver{
-public:
-    Storehouse(ElementID id_, std::unique_ptr<IPackageStockpile> d):
-            IPackageReceiver(), id(id_),queue_pointer(std::move(d)), receiverType(ReceiverType::STOREHOUSE){}
-
-
-    Storehouse()= default;
-    Storehouse(ElementID id):id(id),queue_pointer(std::make_unique<PackageQueue>(PackageQueue(PackageQueueType::FIFO))),receiverType(ReceiverType::STOREHOUSE){}
-    ReceiverType get_receiver_type()const override { return receiverType;}
-public:
-    ElementID  get_id() const override { return id;};
-public:
-    void receive_package(Package&& p) override;
-    IPackageStockpile::const_iterator begin() const  override { return queue_pointer->begin();}
-    IPackageStockpile::const_iterator end() const override { return queue_pointer->end();}
-    //std::deque<Package>::reverse_iterator rbegin() override { return queue_pointer->rbegin();}
-    IPackageStockpile::const_iterator cbegin() const override { return queue_pointer->cbegin();}
-    IPackageStockpile::const_iterator cend() const override { return queue_pointer->cend();}
-    int size(){return queue_pointer->size();}
-    IPackageStockpile* get_queue() const override { return &(*queue_pointer);}
-private:
-    ElementID id;
-    std::unique_ptr<IPackageStockpile> queue_pointer;
-    ReceiverType receiverType;
-
-};
 
 class ReceiverPreferences {
 public:
-    ReceiverPreferences(ProbabilityGenerator p = global_probability_generator): prob_rand(p){};
+    ReceiverPreferences(ProbabilityGenerator p = global_probability_generator): prob_rand(std::move(p)){};
     using preferences_t = std::map<IPackageReceiver*, double>;
     using const_iterator = preferences_t::const_iterator;
     using iterator = preferences_t::iterator;
     iterator begin(){ return preferences_map.begin();}
     iterator end(){return preferences_map.end();}
+
     std::map<IPackageReceiver*, double >::reverse_iterator rbegin(){ return preferences_map.rbegin();}
 
     const_iterator cbegin() const { return  preferences_map.cbegin();}
@@ -136,7 +112,7 @@ public:
     //std::deque<Package>::reverse_iterator rbegin() override { return queue_pointer->rbegin();}
     [[nodiscard]] IPackageStockpile::const_iterator cbegin() const override { return queue_pointer->cbegin();}
     [[nodiscard]] IPackageStockpile::const_iterator cend() const override { return queue_pointer->cend();}
-    int size(){return queue_pointer->size();}
+    int size() const {return queue_pointer->size();}
     void start_process(Package&& p);
     const std::optional<Package>& get_processing_buffer() const;
     ReceiverType get_receiver_type() const override { return receiverType;}
@@ -153,6 +129,32 @@ public:
     std::unique_ptr<IPackageQueue> queue_pointer;
 private:
     ReceiverType receiverType;
+};
+class Storehouse : public IPackageReceiver{
+public:
+    Storehouse(ElementID id_, std::unique_ptr<IPackageStockpile> d):
+            IPackageReceiver(), id(id_),queue_pointer(std::move(d)), receiverType(ReceiverType::STOREHOUSE){}
+
+
+    Storehouse()= default;
+    Storehouse(ElementID id):id(id),queue_pointer(std::make_unique<PackageQueue>(PackageQueue(PackageQueueType::FIFO))),receiverType(ReceiverType::STOREHOUSE){}
+    ReceiverType get_receiver_type()const override { return receiverType;}
+public:
+    ElementID  get_id() const override { return id;};
+public:
+    void receive_package(Package&& p) override;
+    IPackageStockpile::const_iterator begin() const  override { return queue_pointer->begin();}
+    IPackageStockpile::const_iterator end() const override { return queue_pointer->end();}
+    //std::deque<Package>::reverse_iterator rbegin() override { return queue_pointer->rbegin();}
+    IPackageStockpile::const_iterator cbegin() const override { return queue_pointer->cbegin();}
+    IPackageStockpile::const_iterator cend() const override { return queue_pointer->cend();}
+    int size() const {return queue_pointer->size();}
+    IPackageStockpile* get_queue() const override { return &(*queue_pointer);}
+private:
+    ElementID id;
+    std::unique_ptr<IPackageStockpile> queue_pointer;
+    ReceiverType receiverType;
+
 };
 
 #endif //SIECI_PRODUKCYJNE_NODES_HPP

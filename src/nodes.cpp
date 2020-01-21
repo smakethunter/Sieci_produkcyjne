@@ -16,20 +16,26 @@ void Worker::receive_package(Package &&p) {
     queue_pointer->push(std::move(p));
 
     //push_package(queue_pointer->pop());
-    if(!processing_buffer.has_value()) {
-        start_process(queue_pointer->pop());
-    }
-}
 
+}
 void Worker::do_work(Time t) {
-if (processing_start_time==0){
-    processing_start_time=t;
-}
-if (to==t-processing_start_time){
 
+    if(!processing_buffer.has_value()) {
+if(queue_pointer->size())
+{    start_process(queue_pointer->pop());
+        if (processing_start_time==0){
+            processing_start_time=t;
+        }
+    }
+    }
+if (to-1==t-processing_start_time){
+
+if(processing_buffer.has_value()) {
     push_package(std::move(*processing_buffer));
+
     processing_start_time=0;
     processing_buffer.reset();
+}
 }
 
 
